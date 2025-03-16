@@ -1,0 +1,3 @@
+[submodule "build/SIDT/vendor/spdlog"]
+	path = build/SIDT/vendor/spdlog
+	url = https://github.com/ayush-sharma06/spdlog
