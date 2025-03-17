@@ -51,6 +51,7 @@
 CMakeCache.txt
 
 # Ignore build artifacts & intermediate files
+./build
 bin/
 x64/
 CMakeFiles/
