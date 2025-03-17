@@ -1,35 +1,3 @@
-# #keep these types of files and directories
-
-# # CmakeLists.txt
-# # GenerateProjects.bat
-# # vendor/
-# # .gitignore
-# # .gitmodules
-# # LICENSE
-# # README.md
-# # .git
-# # build/SIDT/src/
-# # build/SIDT/vendor
-# # build/SIDT/CmakeLists.txt
-# # build/Simulation/src
-# # build/Simulation/CmakeLists.txt
-
-
-# #files
-# *.vcxproj
-# *.vcxproj.*
-# CMakeCache.txt
-# *.sln
-# *.cmake
-
-
-# #directories
-# ./x64/
-# ./CMakeFiles/
-# ./bin/
-# ./.vs/
-
-
 # Keep these essential files & directories
 !CMakeLists.txt
 !GenerateProjects.bat
