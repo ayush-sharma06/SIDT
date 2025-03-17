@@ -16,11 +16,18 @@
 *.vcxproj.*
 *.sln
 *.cmake
+*.exe
+*.ninja
+*.log
 CMakeCache.txt
 
 # Ignore build artifacts & intermediate files
 build/build
 bin/
+bin-int/
 x64/
 CMakeFiles/
 .vs/
+cmake/
+premake/
+out/

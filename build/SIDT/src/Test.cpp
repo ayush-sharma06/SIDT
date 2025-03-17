@@ -1,6 +1,8 @@
+#include "sdpch.h"
+
 #include "Test.h"
 
-#include <stdio.h>
+
 
 namespace SIDT {
 	void Print() {
