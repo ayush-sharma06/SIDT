@@ -1,8 +1,0 @@
-﻿  Building Custom Rule C:/Dev/SIDT/build/Simulation/CMakeLists.txt
-  Simulation.cpp
-C:\Dev\SIDT\build\SIDT\src\SIDT\Log.h(37,9): warning C4005: 'SD_DEBUG': macro redefinition
-  (compiling source file '../../Simulation/src/Simulation.cpp')
-      C:\Dev\SIDT\build\SIDT\src\SIDT\Log.h(37,9):
-      'SD_DEBUG' previously declared on the command line
-  
-  Simulation.vcxproj -> C:\Dev\SIDT\build\bin\Debug-Windows-AMD64\Simulation\Simulation.exe
