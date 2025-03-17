@@ -1,0 +1,184 @@
+# project(SIDT LANGUAGES CXX)
+
+# set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/${OUTPUT_DIR}/${PROJECT_NAME}")
+# set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/${OUTPUT_DIR}/${PROJECT_NAME}")
+# set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/${OUTPUT_DIR}/${PROJECT_NAME}")
+
+# # Define object file directory (for intermediate files)
+# # set(CMAKE_OBJECT_PATH_MAX 200) # Avoid long path issues on Windows
+
+
+# # Collect all header and source files recursively
+# file(GLOB_RECURSE SIDT_HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h")
+# file(GLOB_RECURSE SIDT_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
+
+# add_library(SIDT SHARED ${SIDT_SOURCES})
+
+# set_target_properties(SIDT PROPERTIES CXX_STANDARD 20 CXX_STANDARD_REQUIRED ON)
+
+# # 🔹 Force intermediate object files to go inside bin-int/
+# set(OBJ_DIR "${CMAKE_BINARY_DIR}/bin-int/${OUTPUT_DIR}/Simulation")
+
+# # 🔹 Override Visual Studio's default object directory
+# set(CMAKE_COMPILE_OBJECT "<CMAKE_CXX_COMPILER> <DEFINES> <INCLUDES> <FLAGS> -o ${OBJ_DIR}/<OBJECT>.obj -c <SOURCE>")
+
+
+# # Add files to the project
+# target_sources(${PROJECT_NAME} PRIVATE ${SIDT_HEADERS} ${SIDT_SOURCES})
+
+# target_include_directories(${PROJECT_NAME} PRIVATE 
+#     "${CMAKE_CURRENT_SOURCE_DIR}/src"
+#     "${CMAKE_CURRENT_SOURCE_DIR}/vendor/spdlog/include"
+# )
+
+# if (WIN32)
+#     # Set C++ Standard to C++20
+#     set(CMAKE_CXX_STANDARD 20)
+#     set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+#     # Enable static runtime
+#     set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+
+#     # Set system version to latest
+#     add_compile_definitions(_WIN32_WINNT=0x0A00)  # Windows 10 or later
+
+#     # Set UTF-8 encoding
+#     target_compile_options(SIDT PRIVATE /utf-8)
+
+#     # Define preprocessor macros
+#     target_compile_definitions(${PROJECT_NAME} PRIVATE 
+#         SD_PLATFORM_WINDOWS
+#         SD_BUILD_DLL
+#     )
+
+#     # Post-build command to copy the output to Simulation
+#     add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+#         COMMAND ${CMAKE_COMMAND} -E copy_if_different
+#         $<TARGET_FILE:${PROJECT_NAME}> 
+#         ${CMAKE_BINARY_DIR}/bin/$<CONFIG>-${CMAKE_SYSTEM_NAME}-${CMAKE_SYSTEM_PROCESSOR}/Simulation/
+#     )
+
+#     # add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+#     #     COMMAND ${CMAKE_COMMAND} -E copy_if_different
+#     #     $<TARGET_FILE:${PROJECT_NAME}> 
+#     #     ${CMAKE_BINARY_DIR}/bin/${CMAKE_BUILD_TYPE}-${CMAKE_SYSTEM_NAME}-${CMAKE_SYSTEM_PROCESSOR}/Simulation/
+#     # )
+# endif()
+
+# # Apply different configurations
+# target_compile_definitions(${PROJECT_NAME} PRIVATE 
+#     $<$<CONFIG:Debug>:SD_DEBUG>
+#     $<$<CONFIG:Release>:SD_RELEASE>
+#     $<$<CONFIG:Dist>:SD_DIST>
+# )
+
+# # Set MSVC Runtime Library options
+# if (MSVC)
+#     target_compile_options(${PROJECT_NAME} PRIVATE 
+#         $<$<CONFIG:Debug>:/MDd>    # Multi-threaded Debug Runtime
+#         $<$<CONFIG:Release>:/MD>   # Multi-threaded Release Runtime
+#         $<$<CONFIG:Dist>:/MD>      # Multi-threaded Runtime for Distribution
+#     )
+# endif()
+
+# # Enable debugging symbols in Debug mode
+# set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /Zi")
+
+# # Enable optimization in Release and Dist modes
+# set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /O2")
+# set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} /O2")
+
+
+project(SIDT LANGUAGES CXX)
+
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/${OUTPUT_DIR}/${PROJECT_NAME}")
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/${OUTPUT_DIR}/${PROJECT_NAME}")
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/${OUTPUT_DIR}/${PROJECT_NAME}")
+
+# Define object file directory (for intermediate files)
+# set(CMAKE_OBJECT_PATH_MAX 200) # Avoid long path issues on Windows
+
+# Function to organize files into folders in Visual Studio
+function(assign_source_group)
+    foreach(FILE IN ITEMS ${ARGN})
+        get_filename_component(PATH "${FILE}" PATH)
+        string(REPLACE "${CMAKE_CURRENT_SOURCE_DIR}/src" "src" GROUP "${PATH}")
+        string(REPLACE "/" "\\" GROUP "${GROUP}")  # Fix for Windows
+        source_group("${GROUP}" FILES "${FILE}")
+    endforeach()
+endfunction()
+
+# Collect all header and source files recursively
+file(GLOB_RECURSE SIDT_HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h")
+file(GLOB_RECURSE SIDT_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
+
+# Apply the function to categorize files correctly
+assign_source_group(${SIDT_HEADERS} ${SIDT_SOURCES})
+
+add_library(SIDT SHARED ${SIDT_SOURCES} ${SIDT_HEADERS})
+set_target_properties(SIDT PROPERTIES CXX_STANDARD 20 CXX_STANDARD_REQUIRED ON)
+
+# 🔹 Force intermediate object files to go inside bin-int/
+set(OBJ_DIR "${CMAKE_BINARY_DIR}/bin-int/${OUTPUT_DIR}/Simulation")
+
+# 🔹 Override Visual Studio's default object directory
+set(CMAKE_COMPILE_OBJECT "<CMAKE_CXX_COMPILER> <DEFINES> <INCLUDES> <FLAGS> -o ${OBJ_DIR}/<OBJECT>.obj -c <SOURCE>")
+
+# Add files to the project
+target_sources(${PROJECT_NAME} PRIVATE ${SIDT_HEADERS} ${SIDT_SOURCES})
+
+target_include_directories(${PROJECT_NAME} PRIVATE 
+    "${CMAKE_CURRENT_SOURCE_DIR}/src"
+    "${CMAKE_CURRENT_SOURCE_DIR}/vendor/spdlog/include"
+)
+
+if (WIN32)
+    # Set C++ Standard to C++20
+    set(CMAKE_CXX_STANDARD 20)
+    set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+    # Enable static runtime
+    set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+
+    # Set system version to latest
+    add_compile_definitions(_WIN32_WINNT=0x0A00)  # Windows 10 or later
+
+    # Set UTF-8 encoding
+    target_compile_options(SIDT PRIVATE /utf-8)
+
+    # Define preprocessor macros
+    target_compile_definitions(${PROJECT_NAME} PRIVATE 
+        SD_PLATFORM_WINDOWS
+        SD_BUILD_DLL
+    )
+
+    # Post-build command to copy the output to Simulation
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        $<TARGET_FILE:${PROJECT_NAME}> 
+        ${CMAKE_BINARY_DIR}/bin/$<CONFIG>-${CMAKE_SYSTEM_NAME}-${CMAKE_SYSTEM_PROCESSOR}/Simulation/
+    )
+endif()
+
+# Apply different configurations
+target_compile_definitions(${PROJECT_NAME} PRIVATE 
+    $<$<CONFIG:Debug>:SD_DEBUG>
+    $<$<CONFIG:Release>:SD_RELEASE>
+    $<$<CONFIG:Dist>:SD_DIST>
+)
+
+# Set MSVC Runtime Library options
+if (MSVC)
+    target_compile_options(${PROJECT_NAME} PRIVATE 
+        $<$<CONFIG:Debug>:/MDd>    # Multi-threaded Debug Runtime
+        $<$<CONFIG:Release>:/MD>   # Multi-threaded Release Runtime
+        $<$<CONFIG:Dist>:/MD>      # Multi-threaded Runtime for Distribution
+    )
+endif()
+
+# Enable debugging symbols in Debug mode
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /Zi")
+
+# Enable optimization in Release and Dist modes
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /O2")
+set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} /O2")

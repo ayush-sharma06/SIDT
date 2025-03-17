@@ -1,0 +1,155 @@
+# # Define the Simulation project
+# add_executable(Simulation)
+
+# set_target_properties(Simulation PROPERTIES
+#     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/${OUTPUT_DIR}/Simulation"
+#     ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/${OUTPUT_DIR}/Simulation"
+#     LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/${OUTPUT_DIR}/Simulation"
+#     OUTPUT_NAME "Simulation"
+# )
+
+# # Define object file directory (for intermediate files)
+# # set(CMAKE_OBJECT_PATH_MAX 200) # Avoid long path issues on Windows
+# # 🔹 Force intermediate object files to go inside bin-int/
+# set(OBJ_DIR "${CMAKE_BINARY_DIR}/bin-int/${OUTPUT_DIR}/Simulation")
+
+# # 🔹 Override Visual Studio's default object directory
+# set(CMAKE_COMPILE_OBJECT "<CMAKE_CXX_COMPILER> <DEFINES> <INCLUDES> <FLAGS> -o ${OBJ_DIR}/<OBJECT>.obj -c <SOURCE>")
+
+
+# # Set language standard
+# set_target_properties(Simulation PROPERTIES CXX_STANDARD 20 CXX_STANDARD_REQUIRED ON)
+
+# # Add source files (recursively include all .h and .cpp files)
+# file(GLOB_RECURSE SIMULATION_SRC
+#     "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h"
+#     "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
+# )
+
+# # Add source files to the Simulation target
+# target_sources(Simulation PRIVATE ${SIMULATION_SRC})
+
+# # Include directories
+# target_include_directories(Simulation PRIVATE
+#     "${CMAKE_BINARY_DIR}/SIDT/vendor/spdlog/include"
+#     "${CMAKE_BINARY_DIR}/SIDT/src"
+# )
+
+# # Link Hazel library
+# target_link_libraries(Simulation PRIVATE SIDT)
+
+# # Set C++ standard and static runtime
+# set_target_properties(Simulation PROPERTIES
+#     CXX_STANDARD 20
+#     CXX_STANDARD_REQUIRED YES
+#     MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>"
+# )
+
+# # Define preprocessor macros based on system
+# if (WIN32)
+#     target_compile_definitions(Simulation PRIVATE SD_PLATFORM_WINDOWS)
+# endif()
+
+# # Compiler flags for Windows
+# if (MSVC)
+#     target_compile_options(Simulation PRIVATE /utf-8)
+# endif()
+
+# # Configuration-specific settings
+# target_compile_definitions(Simulation PRIVATE 
+#     $<$<CONFIG:Debug>:SD_DEBUG>
+#     $<$<CONFIG:Release>:SD_RELEASE>
+#     $<$<CONFIG:Dist>:SD_DIST>
+# )
+
+# target_compile_options(Simulation PRIVATE 
+#     $<$<CONFIG:Debug>:/MDd>
+#     $<$<CONFIG:Release>:/MD>
+#     $<$<CONFIG:Dist>:/MD>
+# )
+
+# # Enable debugging symbols for Debug build
+# target_compile_options(Simulation PRIVATE $<$<CONFIG:Debug>:/Zi>)
+
+# # Optimize for Release and Distribution builds
+# target_compile_options(Simulation PRIVATE 
+#     $<$<CONFIG:Release>:/O2>
+#     $<$<CONFIG:Dist>:/O2>
+# )
+
+
+
+# Define the Simulation project
+add_executable(Simulation)
+
+set_target_properties(Simulation PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/${OUTPUT_DIR}/Simulation"
+    ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/${OUTPUT_DIR}/Simulation"
+    LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/${OUTPUT_DIR}/Simulation"
+    OUTPUT_NAME "Simulation"
+)
+
+# Function to organize files into folders in Visual Studio
+function(assign_source_group)
+    foreach(FILE IN ITEMS ${ARGN})
+        get_filename_component(PATH "${FILE}" PATH)
+        string(REPLACE "${CMAKE_CURRENT_SOURCE_DIR}/src" "src" GROUP "${PATH}")
+        string(REPLACE "/" "\\" GROUP "${GROUP}")  # Fix for Windows
+        source_group("${GROUP}" FILES "${FILE}")
+    endforeach()
+endfunction()
+
+# # Collect source files
+# file(GLOB_RECURSE SIMULATION_SRC
+#     "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h"
+#     "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
+# )
+
+# Collect all header and source files recursively
+file(GLOB_RECURSE SIM_HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h")
+file(GLOB_RECURSE SIM_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
+
+# Apply the function to categorize files correctly
+assign_source_group(${SIM_HEADERS} ${SIM_SOURCES})
+
+# Assign source files
+target_sources(Simulation PRIVATE ${SIM_SOURCES})
+
+# Include directories
+target_include_directories(Simulation PRIVATE
+    "${CMAKE_BINARY_DIR}/SIDT/vendor/spdlog/include"
+    "${CMAKE_BINARY_DIR}/SIDT/src"
+)
+
+# ✅ Link SIDT instead of redefining it
+target_link_libraries(Simulation PRIVATE SIDT)
+
+set_target_properties(Simulation PROPERTIES
+    CXX_STANDARD 20
+    CXX_STANDARD_REQUIRED YES
+    MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>"
+)
+
+# Platform-specific settings
+if (WIN32)
+    target_compile_definitions(Simulation PRIVATE SD_PLATFORM_WINDOWS)
+endif()
+
+if (MSVC)
+    target_compile_options(Simulation PRIVATE /utf-8)
+endif()
+
+target_compile_definitions(Simulation PRIVATE 
+    $<$<CONFIG:Debug>:SD_DEBUG>
+    $<$<CONFIG:Release>:SD_RELEASE>
+    $<$<CONFIG:Dist>:SD_DIST>
+)
+
+target_compile_options(Simulation PRIVATE 
+    $<$<CONFIG:Debug>:/MDd>
+    $<$<CONFIG:Release>:/MD>
+    $<$<CONFIG:Dist>:/MD>
+    $<$<CONFIG:Debug>:/Zi>
+    $<$<CONFIG:Release>:/O2>
+    $<$<CONFIG:Dist>:/O2>
+)
