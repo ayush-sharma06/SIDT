@@ -36,6 +36,13 @@ set_target_properties(Simulation PROPERTIES
 # Platform-specific settings
 if (WIN32)
     target_compile_definitions(Simulation PRIVATE SD_PLATFORM_WINDOWS)
+
+        # Post-build command to copy the output to Simulation
+    add_custom_command(TARGET Simulation POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        $<TARGET_FILE:SIDT>
+        $<TARGET_FILE_DIR:Simulation>
+    )
 endif()
 
 if (MSVC)
