@@ -1,3 +1,6 @@
 [submodule "build/SIDT/vendor/GLFW"]
 	path = build/SIDT/vendor/GLFW
 	url = https://github.com/ayush-sharma06/glfw
+[submodule "build/SIDT/vendor/spdlog"]
+	path = build/SIDT/vendor/spdlog
+	url = https://github.com/ayush-sharma06/spdlog
