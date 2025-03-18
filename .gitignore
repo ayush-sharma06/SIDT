@@ -10,7 +10,6 @@
 !/SIDT/src
 !/SIDT/src/vendor
 !/Simulation/src
-!build/SIDT/vendor/GLFW/.git
 
 # Ignore Visual Studio and CMake-generated files
 *.vcxproj
