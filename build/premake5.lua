@@ -9,6 +9,11 @@ workspace "SIDT"
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
+IncludeDir = {}
+IncludeDir["GLFW"] = "SIDT/vendor/GLFW/include"
+
+include "SIDT/vendor/GLFW"
+
 project "SIDT"
     location "SIDT"
     kind "SharedLib"
@@ -29,6 +34,13 @@ project "SIDT"
     {
         "%{prj.name}/src",
         "%{prj.name}/vendor/spdlog/include",
+        "%{IncludeDir.GLFW}"
+    }
+
+    links
+    {
+        "GLFW",
+        "opengl32.lib"
     }
 
     filter "system:windows"
@@ -40,7 +52,8 @@ project "SIDT"
         defines
         {
             "SD_PLATFORM_WINDOWS",
-            "SD_BUILD_DLL"
+            "SD_BUILD_DLL",
+            "GLFW_INCLUDE_NONE"
         }
 
         postbuildcommands

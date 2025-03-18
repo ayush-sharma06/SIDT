@@ -19,11 +19,13 @@ extern SIDT::Application* SIDT::CreateApplication();
 
 int main(int argc, char** argv)
 {
+    SIDT::Log::Init();
     auto app = SIDT::CreateApplication();
 
     if (g_ExecutionMode == ExecutionMode::SIMULATION_MODE)
     {
-
+        SD_CORE_WARN("Initialized Log!");
+        SD_INFO("Hello!");
         while (true) // Or use a proper IsRunning() check if available
         {
             app->Run(); // Your current Run() function (or OnUpdate() if you add one)
@@ -31,15 +33,9 @@ int main(int argc, char** argv)
     }
     else // g_ExecutionMode == ExecutionMode::CAD_MODE
     {
-        SIDT::Log::Init();
         SD_CORE_WARN("Initialized Log!");
         SD_INFO("Hello!");
-        while (true) // Replace with a proper loop that checks for events
-        {
-            // Placeholder for event processing:
-            // app->OnEventProcessing();
-            // For demonstration, you can simply sleep until an event occurs.
-        }
+        app->Run();
     }
     delete app;
 }

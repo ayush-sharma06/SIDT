@@ -7,11 +7,11 @@ namespace SIDT {
 	class SIDT_API MouseMovedEvent : public Event
 	{
 	public:
-		MouseMovedEvent(float x, float y)
+		MouseMovedEvent(double x, double y)
 			: m_MouseX(x), m_MouseY(y) { }
 
-		inline float GetX() const { return m_MouseX; } //Make more precise
-		inline float GetY() const { return m_MouseY; } //Make more precise
+		inline double GetX() const { return m_MouseX; } //Make more precise
+		inline double GetY() const { return m_MouseY; } //Make more precise
 
 		std::string ToString() const override
 		{
@@ -24,16 +24,16 @@ namespace SIDT {
 		EVENT_CLASS_CATEGORY(EventCategoryMouse|EventCategoryInput)
 
 	private:
-		float m_MouseX, m_MouseY;
+		double m_MouseX, m_MouseY;
 	};
 
 	class SIDT_API MouseScrolledEvent : public Event {
 	public:
-		MouseScrolledEvent(float xOffset, float yOffset)
+		MouseScrolledEvent(double xOffset, double yOffset)
 			: m_XOffset(xOffset), m_YOffset(yOffset){ }
 
-		inline float GetXOffset() { return m_XOffset; } //Make more precise
-		inline float GetYOffset() { return m_YOffset; } //Make more precise
+		inline double GetXOffset() { return m_XOffset; } //Make more precise
+		inline double GetYOffset() { return m_YOffset; } //Make more precise
 
 		std::string ToString() {
 			std::stringstream ss;
@@ -45,7 +45,7 @@ namespace SIDT {
 		EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput)
 
 	private:
-		float m_XOffset, m_YOffset;
+		double m_XOffset, m_YOffset;
 	};
 
 	class SIDT_API MouseButtonEvent : public Event

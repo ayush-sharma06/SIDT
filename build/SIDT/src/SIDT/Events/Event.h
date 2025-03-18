@@ -1,3 +1,5 @@
+#include "sdpch.h"
+
 #pragma once
 
 #include "SIDT/Core.h"

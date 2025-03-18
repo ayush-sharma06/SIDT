@@ -42,7 +42,10 @@ target_sources(${PROJECT_NAME} PRIVATE ${SIDT_HEADERS} ${SIDT_SOURCES})
 target_include_directories(${PROJECT_NAME} PRIVATE 
     "${CMAKE_CURRENT_SOURCE_DIR}/src"
     "${CMAKE_CURRENT_SOURCE_DIR}/vendor/spdlog/include"
+    "${IncludeDir_GLFW}"
 )
+
+target_link_libraries(${PROJECT_NAME} PRIVATE GLFW opengl32)
 
 if (WIN32)
     # Set C++ Standard to C++20
@@ -62,6 +65,7 @@ if (WIN32)
     target_compile_definitions(${PROJECT_NAME} PRIVATE 
         SD_PLATFORM_WINDOWS
         SD_BUILD_DLL
+        GLFW_INCLUDE_NONE
     )
 
     # Post-build command to copy the output to Simulation
