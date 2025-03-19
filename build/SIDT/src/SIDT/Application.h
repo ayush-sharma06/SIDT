@@ -5,6 +5,7 @@
 #include "Events/ApplicationEvent.h"
 #include "Events/KeyEvent.h"
 #include "Events/MouseEvent.h"
+#include "LayerStack.h"
 
 
 namespace SIDT {
@@ -13,6 +14,9 @@ namespace SIDT {
 	public:
 		Application();
 		virtual ~Application(); // why is it defined virtual?
+
+		void PushLayer(Layer* layer);
+		void PushOverlay(Layer* overlay);
 
 		void Run();
 
@@ -31,6 +35,7 @@ namespace SIDT {
 		bool OnMouseMoved(MouseMovedEvent& e);
 		bool OnMouseScrolled(MouseScrolledEvent& e);
 		bool m_Running = true;
+		LayerStack m_LayerStack;
 	};
 
 	//To be defined in Client

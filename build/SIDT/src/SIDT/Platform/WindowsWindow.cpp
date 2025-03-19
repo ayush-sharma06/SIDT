@@ -3,6 +3,7 @@
 #include "SIDT/Events/ApplicationEvent.h"
 #include "SIDT/Events/KeyEvent.h"
 #include "SIDT/Events/MouseEvent.h"
+#include "glad/glad.h"
 
 #ifdef SD_PLATFORM_WINDOWS
 namespace SIDT {
@@ -36,6 +37,8 @@ namespace SIDT {
 		}
 
 		m_Window = glfwCreateWindow((int)props.Width, (int)props.Height, m_Data.Title.c_str(), nullptr, nullptr);
+		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+		SD_CORE_ASSERT(status, "Failed to load Glad!");
 		glfwMakeContextCurrent(m_Window);
 		glfwSetWindowUserPointer(m_Window, &m_Data);
 		

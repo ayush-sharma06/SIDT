@@ -43,9 +43,10 @@ target_include_directories(${PROJECT_NAME} PRIVATE
     "${CMAKE_CURRENT_SOURCE_DIR}/src"
     "${CMAKE_CURRENT_SOURCE_DIR}/vendor/spdlog/include"
     "${IncludeDir_GLFW}"
+    "${IncludeDir_Glad}"
 )
 
-target_link_libraries(${PROJECT_NAME} PRIVATE GLFW opengl32)
+target_link_libraries(${PROJECT_NAME} PRIVATE GLFW Glad opengl32)
 
 if (WIN32)
     # Set C++ Standard to C++20

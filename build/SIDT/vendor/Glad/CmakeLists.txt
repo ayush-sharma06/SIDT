@@ -1,0 +1,38 @@
+cmake_minimum_required(VERSION 3.16...3.28 FATAL_ERROR)
+
+project(Glad VERSION 3.5.0 LANGUAGES C)
+
+set(Glad_LIBRARY_TYPE STATIC)
+
+if(NOT DEFINED OUTPUT_DIR)
+    set(OUTPUT_DIR $<CONFIG>)
+endif()
+
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/${OUTPUT_DIR}/${PROJECT_NAME}")
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/${OUTPUT_DIR}/${PROJECT_NAME}")
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/${OUTPUT_DIR}/${PROJECT_NAME}")
+
+# Define the common files
+set(Glad_FILES
+    "${CMAKE_CURRENT_SOURCE_DIR}/include/Glad/glad.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/include/KHR/khrplatform.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/glad.c"
+)
+
+add_library(Glad ${Glad_LIBRARY_TYPE} ${Glad_FILES})
+
+target_include_directories(Glad PUBLIC
+    "${CMAKE_CURRENT_SOURCE_DIR}/include"
+)
+
+# Set system-specific properties
+if (WIN32)
+    set(CMAKE_SYSTEM_VERSION "latest")  # Equivalent to systemversion "latest"
+endif()
+
+# Set configurations
+# Debug Configuration
+set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} /MDd /Zi")  # runtime "Debug", symbols "On"
+
+# Release Configuration
+set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} /MD /O2")  # runtime "Release", optimize "On"

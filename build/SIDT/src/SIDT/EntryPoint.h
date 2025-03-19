@@ -21,6 +21,7 @@ int main(int argc, char** argv)
 {
     SIDT::Log::Init();
     auto app = SIDT::CreateApplication();
+    auto layer = SIDT::Layer();
 
     if (g_ExecutionMode == ExecutionMode::SIMULATION_MODE)
     {
