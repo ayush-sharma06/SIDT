@@ -22,6 +22,7 @@ public:
 	Simulation() 
 	{
 		PushLayer(new ExampleLayer);
+		PushOverlay(new SIDT::ImGuiLayer());
 	}
 	~Simulation() {}
 };

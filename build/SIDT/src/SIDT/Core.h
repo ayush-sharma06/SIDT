@@ -25,3 +25,5 @@
 #define SD_ASSERT(x, ...)
 #define SD_CORE_ASSERT(x, ...)
 #endif
+
+#define SD_BIND_EVENT_FN(fn) std::bind(&fn, this, std::placeholders::_1)

@@ -13,6 +13,8 @@ set(IncludeDir_GLFW "${CMAKE_CURRENT_SOURCE_DIR}/build/SIDT/vendor/GLFW/include"
 
 set(IncludeDir_Glad "${CMAKE_CURRENT_SOURCE_DIR}/build/SIDT/vendor/Glad/include")
 
+set(IncludeDir_ImGui "${CMAKE_CURRENT_SOURCE_DIR}/build/SIDT/vendor/imgui")
+
 # Add GLFW as a subdirectory so its CMakeLists.txt is processed
 # add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/SIDT/vendor/GLFW/include")
 
@@ -21,3 +23,4 @@ add_subdirectory(build/SIDT)         # Add the SIDT library
 add_subdirectory(build/Simulation)   # Add the Simulation executable
 add_subdirectory(build/SIDT/vendor/GLFW)   # Add the Simulation executable
 add_subdirectory(build/SIDT/vendor/Glad)
+add_subdirectory(build/SIDT/vendor/imgui)

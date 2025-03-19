@@ -32,8 +32,8 @@ namespace SIDT {
 		MouseScrolledEvent(double xOffset, double yOffset)
 			: m_XOffset(xOffset), m_YOffset(yOffset){ }
 
-		inline double GetXOffset() { return m_XOffset; } //Make more precise
-		inline double GetYOffset() { return m_YOffset; } //Make more precise
+		inline double GetXOffset() const { return m_XOffset; } //Make more precise
+		inline double GetYOffset() const { return m_YOffset; } //Make more precise
 
 		std::string ToString() {
 			std::stringstream ss;
@@ -51,7 +51,7 @@ namespace SIDT {
 	class SIDT_API MouseButtonEvent : public Event
 	{
 	public:
-		inline int GetMouseButton() { return m_Button; }
+		inline int GetMouseButton() const { return m_Button; }
 
 		EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput)
 

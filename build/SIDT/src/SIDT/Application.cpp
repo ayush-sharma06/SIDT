@@ -5,38 +5,41 @@
 
 namespace SIDT {
 
-#define BIND_EVENT_FN(x) std::bind(&Application::x, this, std::placeholders::_1)
+	Application* Application::s_Instance = nullptr;
 
 	Application::Application() 
 	{
+		s_Instance = this;
 		m_Window = std::unique_ptr<Window>(Window::Create());
-		m_Window->SetEventCallback(BIND_EVENT_FN(OnEvent));
+		m_Window->SetEventCallback(SD_BIND_EVENT_FN(Application::OnEvent));
 	}
 
 	Application::~Application() { }
 
 	void Application::PushLayer(Layer* layer) {
 		m_LayerStack.PushLayer(layer);
+		layer->OnAttach();
 	}
 	
 	void Application::PushOverlay(Layer* Overlay) {
 		m_LayerStack.PushOverlayer(Overlay);
+		Overlay->OnAttach();
 
 	}
 
 	void Application::OnEvent(Event& e) {
 		EventDispatcher dispatcher(e);
 
-		dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(OnWindowClose));
-		dispatcher.Dispatch<WindowResizeEvent>(BIND_EVENT_FN(OnWindowResize));
-		dispatcher.Dispatch<WindowMovedEvent>(BIND_EVENT_FN(OnWindowMoved));
-		dispatcher.Dispatch<KeyPressedEvent>(BIND_EVENT_FN(OnKeyPressed));
-		dispatcher.Dispatch<KeyReleasedEvent>(BIND_EVENT_FN(OnKeyReleased));
-		dispatcher.Dispatch<KeyTypedEvent>(BIND_EVENT_FN(OnKeyTyped));
-		dispatcher.Dispatch<MouseButtonPressedEvent>(BIND_EVENT_FN(OnMouseButtonPressed));
-		dispatcher.Dispatch<MouseButtonReleasedEvent>(BIND_EVENT_FN(OnMouseButtonReleased));
-		dispatcher.Dispatch<MouseMovedEvent>(BIND_EVENT_FN(OnMouseMoved));
-		dispatcher.Dispatch<MouseScrolledEvent>(BIND_EVENT_FN(OnMouseScrolled));
+		dispatcher.Dispatch<WindowCloseEvent>(SD_BIND_EVENT_FN(Application::OnWindowClose));
+		dispatcher.Dispatch<WindowResizeEvent>(SD_BIND_EVENT_FN(Application::OnWindowResize));
+		dispatcher.Dispatch<WindowMovedEvent>(SD_BIND_EVENT_FN(Application::OnWindowMoved));
+		dispatcher.Dispatch<KeyPressedEvent>(SD_BIND_EVENT_FN(Application::OnKeyPressed));
+		dispatcher.Dispatch<KeyReleasedEvent>(SD_BIND_EVENT_FN(Application::OnKeyReleased));
+		dispatcher.Dispatch<KeyTypedEvent>(SD_BIND_EVENT_FN(Application::OnKeyTyped));
+		dispatcher.Dispatch<MouseButtonPressedEvent>(SD_BIND_EVENT_FN(Application::OnMouseButtonPressed));
+		dispatcher.Dispatch<MouseButtonReleasedEvent>(SD_BIND_EVENT_FN(Application::OnMouseButtonReleased));
+		dispatcher.Dispatch<MouseMovedEvent>(SD_BIND_EVENT_FN(Application::OnMouseMoved));
+		dispatcher.Dispatch<MouseScrolledEvent>(SD_BIND_EVENT_FN(Application::OnMouseScrolled));
 
 		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();) {
 			(*--it)->OnEvent(e);

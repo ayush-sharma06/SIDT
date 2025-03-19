@@ -17,13 +17,13 @@ namespace SIDT {
 
 		void PushLayer(Layer* layer);
 		void PushOverlay(Layer* overlay);
-
+		inline static Application& Get() { return *s_Instance; }
+		inline Window& GetWindow() { return *m_Window; }
 		void Run();
 
 		void OnEvent(Event& e);
 
 	private:
-		std::unique_ptr<Window> m_Window;
 		bool OnWindowClose(WindowCloseEvent& e);
 		bool OnWindowResize(WindowResizeEvent& e);
 		bool OnWindowMoved(WindowMovedEvent& e);
@@ -34,8 +34,12 @@ namespace SIDT {
 		bool OnMouseButtonReleased(MouseButtonReleasedEvent& e);
 		bool OnMouseMoved(MouseMovedEvent& e);
 		bool OnMouseScrolled(MouseScrolledEvent& e);
+
+	private:
+		static Application* s_Instance;
 		bool m_Running = true;
 		LayerStack m_LayerStack;
+		std::unique_ptr<Window> m_Window;
 	};
 
 	//To be defined in Client
