@@ -8,11 +8,18 @@ public:
 
 
 	void OnUpdate() override {
-		SD_TRACE("Example Layer : Update");
+		/*SD_TRACE("Example Layer : Update");*/
+		if (SIDT::Input::IsKeyPressed(SIDT_KEY_TAB)) SD_TRACE("Tab Key Pressed");
 	}
 
-	void OnEvent(SIDT::Event& e) {
-		SD_TRACE("Layer: {0}", e.ToString());
+	void OnEvent(SIDT::Event& event) {
+		/*SD_TRACE("Layer: {0}", event.ToString());*/
+		if (event.GetEventType() == SIDT::EventType::KeyPressed)
+		{
+			SIDT::KeyPressedEvent& e = (SIDT::KeyPressedEvent&)event;
+			if (e.GetKeyCode() == SIDT_KEY_TAB) SD_TRACE("Tab Key Pressed Event");
+			SD_TRACE("{0}", (char)e.GetKeyCode());
+		}
 	}
 };
 

@@ -1,6 +1,7 @@
 #include "sdpch.h"
 
 #include "Application.h"
+#include "Input.h"
 
 
 namespace SIDT {
@@ -28,6 +29,9 @@ namespace SIDT {
 	}
 
 	void Application::OnEvent(Event& e) {
+
+		auto pos = Input::GetMousePos();
+		SD_CORE_TRACE("{0}, {1}", pos.first, pos.second);
 		EventDispatcher dispatcher(e);
 
 		dispatcher.Dispatch<WindowCloseEvent>(SD_BIND_EVENT_FN(Application::OnWindowClose));
